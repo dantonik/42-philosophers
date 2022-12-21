@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:11:40 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/20 15:52:46 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/21 10:04:08 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ void	check_death(t_args *check_args)
 				return (kill_all(check_args, i));
 			pthread_mutex_unlock(&check_args->check_mutex[i]);
 			check_args->finished = 0;
-			usleep(50);
 		}
-		usleep(500);
+		usleep(100);
 	}
 }

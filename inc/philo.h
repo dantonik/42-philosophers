@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 13:20:22 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/20 16:27:38 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/21 10:18:54 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ typedef struct s_args
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					finished;
-	int*				meals_to_finish; // number of times each philosopher must eat
-	int*				alive; // array to keep track of which philosophers are still alive
-	pthread_mutex_t*	forks; // array of mutexes for each fork
+	int					*meals_to_finish; // number of times each philosopher must eat
+	int					*alive; // array to keep track of which philosophers are still alive
+	pthread_mutex_t		*forks; // array of mutexes for each fork
 	int					first_fork;
 	int					second_fork;
-	pthread_mutex_t*	check_mutex; // mutex to protect data accessed by checking thread and philosopher threads
+	pthread_mutex_t		*check_mutex; // mutex to protect data accessed by checking thread and philosopher threads
 }	t_args;
 
 // typedef struct s_philo
