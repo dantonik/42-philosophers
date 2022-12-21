@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 13:20:22 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/21 10:18:54 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/21 11:29:34 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void		*ft_calloc(size_t count, size_t size);
 void		parse_data(char **av, int ac, t_args *data);
 
 // PRINT
-void		ft_print(t_args *args, int msg);
+int			ft_print(t_args *args, int msg);
 int			done(t_args *args);
 
 // ROUTINE

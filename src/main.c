@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 13:19:35 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/21 10:18:23 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/21 13:26:13 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_args *check_thread_args)
 	i = -1;
 	check_thread_args->n_philos = args.n_philos;
 	check_thread_args->alive = args.alive;
+	check_thread_args->meals_to_finish = args.meals_to_finish;
 	check_thread_args->check_mutex = args.check_mutex;
 	check_thread_args->finished = 0;
 	while (++i < args.n_philos)
@@ -50,9 +51,8 @@ t_args *check_thread_args)
 		thread_args[i].alive = args.alive;
 		thread_args[i].meals_to_finish = args.meals_to_finish;
 		thread_args[i].forks = args.forks;
-		// thread_args[i].forks = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
 		thread_args[i].check_mutex = args.check_mutex;
-		// thread_args[i].check_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+		thread_args[i].start_time = args.start_time;
 	}
 }
 
@@ -78,9 +78,9 @@ int	main(int argc, char *argv[])
 	while (++i < args.n_philos)
 		pthread_create(&threads[i], NULL, routine, (void *)&thread_args[i]);
 	i = -1;
+	check_death(&check_thread_args);
 	// while (++i < args.n_philos)
 	// 	pthread_detach(threads[i]);
-	check_death(&check_thread_args);
 	while (++i < args.n_philos)
 		pthread_join(threads[i], NULL);
 	i = -1;

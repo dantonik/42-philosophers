@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 13:26:23 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/20 15:19:50 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/21 13:25:48 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,5 @@ void	parse_data(char **av, int ac, t_args *data)
 		pthread_mutex_init(&data->forks[i], NULL);
 		pthread_mutex_init(&data->check_mutex[i], NULL);
 	}
+	data->start_time = get_time();
 }

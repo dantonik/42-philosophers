@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:11:40 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/21 10:04:08 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/21 12:53:31 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,14 @@ void	check_death(t_args *check_args)
 {
 	int	i;
 
+	check_args->finished = 0;
 	while (1)
 	{
 		i = -1;
-		while (++i > check_args->n_philos)
+		while (++i < check_args->n_philos)
 		{
 			pthread_mutex_lock(&check_args->check_mutex[i]);
-			if (!check_args->alive[i])
+			if (check_args->alive[i] == 0)
 				return (kill_all(check_args, i));
 			if (check_args->meals_to_finish[i] == 0)
 				check_args->finished++;
@@ -44,6 +45,6 @@ void	check_death(t_args *check_args)
 			pthread_mutex_unlock(&check_args->check_mutex[i]);
 			check_args->finished = 0;
 		}
-		usleep(100);
+		usleep(1000);
 	}
 }
