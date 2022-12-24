@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 13:19:35 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/21 13:26:13 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/24 06:05:11 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	check_values(t_args args)
 {
 	if (args.time_to_die < MIN_TIME || args.time_to_eat < \
-	MIN_TIME || args.time_to_sleep < MIN_TIME)
+	MIN_TIME || args.time_to_sleep < MIN_TIME || args.n_philos > \
+	MAX_PHILOS || args.n_philos < 1)
 		return (1);
 	return (0);
 }
@@ -30,7 +31,9 @@ t_args *check_thread_args)
 	check_thread_args->alive = args.alive;
 	check_thread_args->meals_to_finish = args.meals_to_finish;
 	check_thread_args->check_mutex = args.check_mutex;
+	check_thread_args->last_meal = args.last_meal;
 	check_thread_args->finished = 0;
+	check_thread_args->time_to_die = args.time_to_die;
 	while (++i < args.n_philos)
 	{
 		if (i % 2 == 0)
@@ -53,7 +56,9 @@ t_args *check_thread_args)
 		thread_args[i].forks = args.forks;
 		thread_args[i].check_mutex = args.check_mutex;
 		thread_args[i].start_time = args.start_time;
+		thread_args[i].last_meal = args.last_meal;
 	}
+	check_thread_args->args = thread_args;
 }
 
 int	main(int argc, char *argv[])
@@ -64,8 +69,8 @@ int	main(int argc, char *argv[])
 	pthread_t	*threads;
 	int			i;
 
-	if (argc < 5 || argc > 6)
-		return (printf("Error: wrong amount of arguments!\n"), 1);
+	if (argc < 5 || argc > 6 || (argc == 6 && ft_atoi(argv[5]) < 1))
+		return (printf("Error: invalid input!\n"), 1);
 	if (atoi(argv[1]) == 1)
 		return (printf("0 1 died\n"), 0);
 	parse_data(argv + 1, argc, &args);
@@ -79,10 +84,8 @@ int	main(int argc, char *argv[])
 		pthread_create(&threads[i], NULL, routine, (void *)&thread_args[i]);
 	i = -1;
 	check_death(&check_thread_args);
-	// while (++i < args.n_philos)
-	// 	pthread_detach(threads[i]);
 	while (++i < args.n_philos)
-		pthread_join(threads[i], NULL);
+		pthread_detach(threads[i]);
 	i = -1;
 	while (++i < args.n_philos)
 	{

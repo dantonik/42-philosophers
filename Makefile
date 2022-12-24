@@ -6,7 +6,7 @@
 #    By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/18 13:19:13 by dantonik          #+#    #+#              #
-#    Updated: 2022/12/21 12:11:53 by dantonik         ###   ########.fr        #
+#    Updated: 2022/12/24 05:29:53 by dantonik         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,10 @@ $(OBJDIR):
 
 $(NAME): $(OBJ) inc/philo.h
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+
+r: re
+	printf "\e[1;1H\e[2J";
+	./philo 5 800 200 200
 
 clean:
 	rm -rf $(OBJDIR)

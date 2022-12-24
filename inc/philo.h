@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 13:20:22 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/21 11:29:34 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/23 08:28:01 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,16 @@
 # define RESET	"\033[0m"
 
 # define MIN_TIME 60
+# define MAX_PHILOS 199
 
 enum e_print
 {
 	P_EAT,
 	P_SLEEP,
 	P_THINK,
+	P_FORK,
 	P_DEAD,
-	P_FORK
+	P_FULL
 };
 
 typedef struct s_args
@@ -50,47 +52,19 @@ typedef struct s_args
 	int					pid;
 	int					n_philos;
 	size_t				start_time;
-	size_t				last_meal;
+	size_t				*last_meal;
 	int					time_to_die;
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					finished;
-	int					*meals_to_finish; // number of times each philosopher must eat
-	int					*alive; // array to keep track of which philosophers are still alive
-	pthread_mutex_t		*forks; // array of mutexes for each fork
+	int					*meals_to_finish;
+	int					*alive;
+	pthread_mutex_t		*forks;
 	int					first_fork;
 	int					second_fork;
-	pthread_mutex_t		*check_mutex; // mutex to protect data accessed by checking thread and philosopher threads
+	pthread_mutex_t		*check_mutex;
+	struct s_args		*args;
 }	t_args;
-
-// typedef struct s_philo
-// {
-// 	int					id;
-// 	int					n_philos;
-// 	size_t				start_time;
-// 	pthread_mutex_t		fork;
-// 	pthread_mutex_t		*first_fork;
-// 	pthread_mutex_t		*second_fork;
-// 	int					meals;
-// 	pthread_mutex_t		mmeals;
-// 	bool				done;
-// 	pthread_mutex_t		mdone;
-// 	size_t				last_meal;
-// 	struct s_data		*data;
-// }	t_philo;
-
-// typedef struct s_data
-// {
-// 	int					n_philos;
-// 	int					time_to_die;
-// 	int					time_to_eat;
-// 	int					time_to_sleep;
-// 	int					total_meals;
-// 	bool				alive;
-// 	size_t				start_time;
-// 	pthread_mutex_t		mutex;
-// 	t_philo				*p;
-// }	t_data;
 
 // MAIN THREAD
 void		check_death(t_args *check_args);
