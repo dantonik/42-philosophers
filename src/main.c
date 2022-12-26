@@ -85,7 +85,7 @@ int	main(int argc, char *argv[])
 	i = -1;
 	check_death(&check_thread_args);
 	while (++i < args.n_philos)
-		pthread_detach(threads[i]);
+		pthread_join(threads[i], NULL);
 	i = -1;
 	while (++i < args.n_philos)
 	{

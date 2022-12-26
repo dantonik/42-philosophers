@@ -88,4 +88,6 @@ void		*routine(void *args);
 time_t		get_time(void);
 void		ft_sleep(size_t sleep);
 
+int			is_alive(t_args	*pargs, int i);
+
 #endif

@@ -12,33 +12,30 @@
 
 #include "../inc/philo.h"
 
-int	done(t_args *args)
-{
-	int	alive;
+// int	done(t_args *args)
+// {
+// 	int	alive;
 
-	alive = 1;
-	pthread_mutex_lock(&args->check_mutex[args->pid]);
-	if (*args->alive == 0)
-		alive = 0;
-	pthread_mutex_unlock(&args->check_mutex[args->pid]);
-	return (alive);
-}
+// 	alive = 1;
+// 	pthread_mutex_lock(&args->check_mutex[args->pid]);
+// 	if (*args->alive == 0)
+// 		alive = 0;
+// 	pthread_mutex_unlock(&args->check_mutex[args->pid]);
+// 	return (alive);
+// }
 
 int	ft_print(t_args *args, int msg)
 {
 	static pthread_mutex_t	print = PTHREAD_MUTEX_INITIALIZER;
-	static int				dead = 0;
 
-	if (msg == P_FULL)
-		return (dead = 1, 1);
-	if (dead == 1)
-		return (1);
+	// if (msg == P_FULL)
+	// 	return (1);
 	pthread_mutex_lock(&print);
-	if (msg == P_DEAD)
-		return (printf("%d %d %sdied%s\n", \
-		(int)(get_time() - args->start_time), (args)->pid + 1, RED, RESET), \
-		dead = 1, 1);
-	else
+	// if (msg == P_DEAD)
+	// 	return (printf("%d %d %sdied%s\n", \
+	// 	(int)(get_time() - args->start_time), (args)->pid + 1, RED, RESET), \
+	// 	dead = 1, 1);
+	if (msg == P_DEAD || is_alive(args, args->pid))
 	{
 		printf("%d %d ", (int)(get_time() - args->start_time), \
 		args->pid + 1);
@@ -50,6 +47,8 @@ int	ft_print(t_args *args, int msg)
 			printf("is sleeping\n");
 		else if (msg == P_FORK)
 			printf("has taken a fork\n");
+		else if (msg == P_DEAD)
+			printf("%sdied%s\n", RED, RESET);
 	}
 	pthread_mutex_unlock(&print);
 	return (0);

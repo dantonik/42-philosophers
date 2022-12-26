@@ -12,6 +12,16 @@
 
 #include "../inc/philo.h"
 
+int	is_alive(t_args	*pargs, int i)
+{
+	int	alive;
+
+	pthread_mutex_lock(pargs->check_mutex);
+	alive = *pargs->alive;
+	pthread_mutex_unlock(pargs->check_mutex);
+	return (alive);
+}
+
 void	*routine(void *args)
 {
 	t_args	*pargs;
@@ -23,7 +33,7 @@ void	*routine(void *args)
 	ft_print(pargs, P_THINK);
 	if (pargs->pid % 2 == 0)
 		ft_sleep(pargs->time_to_eat);
-	while (pargs->alive[pargs->pid] == 1)
+	while (is_alive(pargs, pargs->pid) == 1)
 	{
 		usleep(200);
 		pthread_mutex_lock(&pargs->forks[pargs->first_fork]);

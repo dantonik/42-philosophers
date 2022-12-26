@@ -55,8 +55,8 @@ void	check_death(t_args *check_args)
 			if ((get_time() - check_args->last_meal[i]) >= \
 			(unsigned long)check_args->time_to_die)
 				return (kill_all(check_args, i));
-			else if (check_args->alive[i] == 0)
-				return (kill_all(check_args, i));
+			// else if (check_args->alive[i] == 0)
+			// 	return (kill_all(check_args, i));
 			if (check_args->meals_to_finish[i] == 0)
 				check_args->finished++;
 			pthread_mutex_unlock(&check_args->check_mutex[i]);
