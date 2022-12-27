@@ -6,13 +6,13 @@
 #    By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/18 13:19:13 by dantonik          #+#    #+#              #
-#    Updated: 2022/12/24 05:29:53 by dantonik         ###   ########.fr        #
+#    Updated: 2022/12/27 12:52:41 by dantonik         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -pthread #-fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -pthread #-fsanitize=address
 SRC =	main.c \
 		main_thread.c \
 		minilibft.c \

@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 13:19:35 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/24 06:05:11 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/27 13:43:12 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,31 @@ int	check_values(t_args args)
 	MAX_PHILOS || args.n_philos < 1)
 		return (1);
 	return (0);
+}
+
+static void	inner_loop(t_args *thread_args, int i, t_args args)
+{
+	if (i % 2 == 0)
+	{
+		thread_args[i].first_fork = i;
+		thread_args[i].second_fork = (i + 1) % args.n_philos;
+	}
+	else
+	{
+		thread_args[i].first_fork = (i + 1) % args.n_philos;
+		thread_args[i].second_fork = i;
+	}
+	thread_args[i].pid = i;
+	thread_args[i].n_philos = args.n_philos;
+	thread_args[i].time_to_eat = args.time_to_eat;
+	thread_args[i].time_to_die = args.time_to_die;
+	thread_args[i].time_to_sleep = args.time_to_sleep;
+	thread_args[i].alive = args.alive;
+	thread_args[i].meals_to_finish = args.meals_to_finish;
+	thread_args[i].forks = args.forks;
+	thread_args[i].check_mutex = args.check_mutex;
+	thread_args[i].start_time = args.start_time;
+	thread_args[i].last_meal = args.last_meal;
 }
 
 void	init_thread_args(t_args args, t_args *thread_args, \
@@ -36,29 +61,36 @@ t_args *check_thread_args)
 	check_thread_args->time_to_die = args.time_to_die;
 	while (++i < args.n_philos)
 	{
-		if (i % 2 == 0)
-		{
-			thread_args[i].first_fork = i;
-			thread_args[i].second_fork = (i + 1) % args.n_philos;
-		}
-		else
-		{
-			thread_args[i].first_fork = (i + 1) % args.n_philos;
-			thread_args[i].second_fork = i;
-		}
-		thread_args[i].pid = i;
-		thread_args[i].n_philos = args.n_philos;
-		thread_args[i].time_to_eat = args.time_to_eat;
-		thread_args[i].time_to_die = args.time_to_die;
-		thread_args[i].time_to_sleep = args.time_to_sleep;
-		thread_args[i].alive = args.alive;
-		thread_args[i].meals_to_finish = args.meals_to_finish;
-		thread_args[i].forks = args.forks;
-		thread_args[i].check_mutex = args.check_mutex;
-		thread_args[i].start_time = args.start_time;
-		thread_args[i].last_meal = args.last_meal;
+		inner_loop(thread_args, i, args);
 	}
 	check_thread_args->args = thread_args;
+}
+
+void	cleanup(t_args *thread_args, pthread_t *threads, \
+t_args args, t_args *check_thread_args)
+{
+	int	i;
+
+	i = -1;
+	while (++i < args.n_philos)
+		pthread_create(&threads[i], NULL, routine, (void *)&thread_args[i]);
+	i = -1;
+	check_death(check_thread_args);
+	while (++i < args.n_philos)
+		pthread_join(threads[i], NULL);
+	i = -1;
+	while (++i < args.n_philos)
+	{
+		pthread_mutex_destroy(&args.forks[i]);
+		pthread_mutex_destroy(&args.check_mutex[i]);
+	}
+	free(thread_args->forks);
+	free(thread_args->alive);
+	free(thread_args->last_meal);
+	free(thread_args->check_mutex);
+	free(thread_args->meals_to_finish);
+	free(thread_args);
+	free(threads);
 }
 
 int	main(int argc, char *argv[])
@@ -79,18 +111,6 @@ int	main(int argc, char *argv[])
 	thread_args = (t_args *)malloc(sizeof(t_args) * args.n_philos);
 	init_thread_args(args, thread_args, &check_thread_args);
 	threads = (pthread_t *)malloc(args.n_philos * sizeof(pthread_t));
-	i = -1;
-	while (++i < args.n_philos)
-		pthread_create(&threads[i], NULL, routine, (void *)&thread_args[i]);
-	i = -1;
-	check_death(&check_thread_args);
-	while (++i < args.n_philos)
-		pthread_join(threads[i], NULL);
-	i = -1;
-	while (++i < args.n_philos)
-	{
-		pthread_mutex_destroy(&args.forks[i]);
-		pthread_mutex_destroy(&args.check_mutex[i]);
-	}
+	cleanup(thread_args, threads, args, &check_thread_args);
 	return (0);
 }

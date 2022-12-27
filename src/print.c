@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 14:15:39 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/23 08:45:28 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/27 12:55:42 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,13 @@ int	ft_print(t_args *args, int msg)
 {
 	static pthread_mutex_t	print = PTHREAD_MUTEX_INITIALIZER;
 
-	// if (msg == P_FULL)
-	// 	return (1);
 	pthread_mutex_lock(&print);
-	// if (msg == P_DEAD)
-	// 	return (printf("%d %d %sdied%s\n", \
-	// 	(int)(get_time() - args->start_time), (args)->pid + 1, RED, RESET), \
-	// 	dead = 1, 1);
 	if (msg == P_DEAD || is_alive(args, args->pid))
 	{
 		printf("%d %d ", (int)(get_time() - args->start_time), \
 		args->pid + 1);
 		if (msg == P_EAT)
-			printf("%sis eating%s\n", CYAN, RESET);
+			printf("is eating\n");
 		else if (msg == P_THINK)
 			printf("is thinking\n");
 		else if (msg == P_SLEEP)
@@ -48,7 +42,7 @@ int	ft_print(t_args *args, int msg)
 		else if (msg == P_FORK)
 			printf("has taken a fork\n");
 		else if (msg == P_DEAD)
-			printf("%sdied%s\n", RED, RESET);
+			printf("died\n");
 	}
 	pthread_mutex_unlock(&print);
 	return (0);
